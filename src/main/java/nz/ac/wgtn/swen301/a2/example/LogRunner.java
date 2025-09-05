@@ -1,7 +1,9 @@
 package nz.ac.wgtn.swen301.a2.example;
 
+import nz.ac.wgtn.swen301.a2.MemAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
+
 import java.util.Random;
 
 public class LogRunner {
@@ -18,6 +20,11 @@ public class LogRunner {
     };
 
     public static void main(String[] args) throws InterruptedException {
+        // ✅ Create and attach MemAppender
+        MemAppender memAppender = new MemAppender();
+        memAppender.setName("MainMemoryAppender");
+        LOGGER.addAppender(memAppender);
+
         long endTime = System.currentTimeMillis() + 120000; // 2 minutes
 
         while (System.currentTimeMillis() < endTime) {
@@ -28,5 +35,9 @@ public class LogRunner {
 
             Thread.sleep(1000); // 1 second
         }
+
+        // ✅ Optionally, export logs at the end
+        memAppender.export("out.json");
+        System.out.println("Logs exported to out.json");
     }
 }
